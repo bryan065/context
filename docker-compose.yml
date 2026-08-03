@@ -1,0 +1,11 @@
+services:
+  context-mcp:
+    container_name: context-mcp
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: packages/context/Dockerfile
+    volumes:
+      - ${CONFIG_PATH:-./.context/packages/}:/root/.context/packages
+    ports:
+      - "${PORT:-8080}:8080"
