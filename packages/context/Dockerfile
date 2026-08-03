@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim AS build
+FROM node:26-bookworm-slim AS build
 
 WORKDIR /app
 
@@ -13,13 +13,15 @@ RUN corepack enable \
   && pnpm --filter @neuledge/context deploy --prod --legacy /deploy
 
 
-FROM node:22-bookworm-slim AS runtime
+FROM node:26-bookworm-slim AS runtime
 
 WORKDIR /app
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends git ca-certificates \
   && rm -rf /var/lib/apt/lists/*
+
+RUN echo 'alias context="node dist/cli.js"' >> /root/.bashrc
 
 COPY --from=build /deploy ./
 
